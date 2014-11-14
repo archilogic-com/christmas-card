@@ -1,4 +1,11 @@
-var WIDTH = document.body.clientWidth, HEIGHT = document.body.clientHeight;
+var WIDTH = document.body.clientWidth,
+    HEIGHT = document.body.clientHeight,
+    NUM_SNOWFLAKES = 10000;
+
+var spin = 0,
+    dragStart = 0,
+    dragging  = false;
+
 var scene = new THREE.Scene(),
     camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 1000),
     renderer = new THREE.WebGLRenderer();
@@ -56,26 +63,27 @@ scene.add(box);
 
 // create ground
 
-var groundGeometry = new THREE.CubeGeometry(50, 5, 50);
-var groundMaterial = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.DoubleSide});
-var ground = new THREE.Mesh(groundGeometry,groundMaterial);
+var groundGeometry = new THREE.CubeGeometry(50, 5, 50),
+    groundMaterial = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.DoubleSide}),
+    ground = new THREE.Mesh(groundGeometry,groundMaterial);
+
 ground.position.set(0, -22.5, 0);
 box.add(ground);
 //scene.add(ground);
 
 // create Snow
 
-var NUM_SNOWFLAKES = 10000;
-snowGeometry = new THREE.Geometry();
-snowMaterial = new THREE.PointCloudMaterial({ color: 0xffffff, size: 0.1 });
-var snow = new THREE.PointCloud(snowGeometry, snowMaterial);
+var snowGeometry = new THREE.Geometry(),
+    snowMaterial = new THREE.PointCloudMaterial({ color: 0xffffff, size: 0.1 }),
+    snow         = new THREE.PointCloud(snowGeometry, snowMaterial);
+
 snow.sortParticles = true;
 
 for(var i=0;i<NUM_SNOWFLAKES;i++) {
-	snowGeometry.vertices.push(new THREE.Vector3(-25 + Math.random() * 50, -25 + Math.random() * 50, -25 + Math.random() * 50));
+  var vector = new THREE.Vector3(-25 + Math.random() * 50, -25 + Math.random() * 50, -25 + Math.random() * 50);
+  vector.velocity = Math.random() * 0.05;
+	snowGeometry.vertices.push(vector);
 }
-
-var spin = 0;
 
 //scene.add(snow);
 box.add(snow);
@@ -85,46 +93,62 @@ box.add(snow);
 camera.position.set(0,25,100);
 
 // Event listeners
-var dragStart = {x: 0, y: 0, dragging: false};
 window.addEventListener('mousedown', function(e) {
-  dragStart.x = e.clientX;
-  dragStart.y = e.clientY;
-  dragStart.dragging = true;
+  dragStart = e.clientX;
+  dragging = true;
 });
 
 window.addEventListener('mousemove', function(e) {
-  if(!dragStart.dragging) return;
-  if(e.clientX < dragStart.x && spin > -1000)
+  if(!dragging) return;
+  if(e.clientX < dragStart && spin > -WIDTH/10)
     spin -= 50;
-  else if(e.clientX > dragStart.x && spin < 1000)
+  else if(e.clientX > dragStart && spin < WIDTH/10)
     spin += 50;
 
-  dragStart.x = e.clientX;
+  dragStart = e.clientX;
 });
 
 window.addEventListener('mouseup', function(e) {
-  dragStart.dragging = false;
-  //spin = (e.clientX - dragStart.x) / 100;
+  dragging = false;
 });
+
+window.addEventListener('devicemotion', function(e) {
+  if(e.rotationRate === null || e.rotationRate.alpha === null) return;
+  spin += Math.round(e.rotationRate.alpha * -150);
+
+  if(spin < -1000) {
+    spin = -1000;
+  } else if (spin > 1000) {
+    spin = 1000;
+  }
+});
+
+window.addEventListener("orientationchange", function() {
+  if(window.orientation == 0) alert("Please view this in landscape mode!");
+});
+
 // Go!
 
 function render() {
 	requestAnimationFrame(render);
-console.log("spin", spin);
   if(spin < 0) {
-    box.rotation.y -= spin / -5000;
+    //box.rotation.y -= spin / -5000;
     spin += 1;
   } else if(spin > 0) {
-    box.rotation.y += spin / 5000;
+    //box.rotation.y += spin / 5000;
     spin -= 1;
   }
 
   for(var i=0;i<NUM_SNOWFLAKES;i++) {
-		snowGeometry.vertices[i].y -= 0.05;
-    //snowGeometry.vertices[i].x += spin;
+		snowGeometry.vertices[i].y -= snowGeometry.vertices[i].velocity;
+    snowGeometry.vertices[i].x += (spin / 30) * snowGeometry.vertices[i].velocity;
+
+    if(snowGeometry.vertices[i].x < -25) snowGeometry.vertices[i].x =  25;
+    if(snowGeometry.vertices[i].x >  25) snowGeometry.vertices[i].x = -25;
 
 		if (snowGeometry.vertices[i].y < -25) {
-		snowGeometry.vertices[i].y = 10 + Math.random() * 15;
+		  snowGeometry.vertices[i].y =  10 + Math.random() * 15;
+      snowGeometry.vertices[i].x = -25 + Math.random() * 50;
 		}
 	}
 
