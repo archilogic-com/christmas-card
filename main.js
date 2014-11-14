@@ -94,26 +94,34 @@ window.addEventListener('mousedown', function(e) {
 
 window.addEventListener('mousemove', function(e) {
   if(!dragStart.dragging) return;
-  if(e.clientX < dragStart.x)
-    box.rotation.y -= 0.05;
-  else
-    box.rotation.y += 0.05;
+  if(e.clientX < dragStart.x && spin > -1000)
+    spin -= 50;
+  else if(e.clientX > dragStart.x && spin < 1000)
+    spin += 50;
+
+  dragStart.x = e.clientX;
 });
 
 window.addEventListener('mouseup', function(e) {
   dragStart.dragging = false;
-  spin = (e.clientX - dragStart.x) / 100;
+  //spin = (e.clientX - dragStart.x) / 100;
 });
 // Go!
 
 function render() {
 	requestAnimationFrame(render);
+console.log("spin", spin);
+  if(spin < 0) {
+    box.rotation.y -= spin / -5000;
+    spin += 1;
+  } else if(spin > 0) {
+    box.rotation.y += spin / 5000;
+    spin -= 1;
+  }
 
   for(var i=0;i<NUM_SNOWFLAKES;i++) {
 		snowGeometry.vertices[i].y -= 0.05;
-    snowGeometry.vertices[i].x += spin;
-
-    spin = 0;
+    //snowGeometry.vertices[i].x += spin;
 
 		if (snowGeometry.vertices[i].y < -25) {
 		snowGeometry.vertices[i].y = 10 + Math.random() * 15;
