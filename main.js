@@ -1,7 +1,7 @@
 var WIDTH = document.body.clientWidth,
     HEIGHT = document.body.clientHeight,
     NUM_SNOWFLAKES = 10000,
-    FALL_SPEED_QUOTIENT = 35;
+    FALL_SPEED_QUOTIENT = 10;
 
 var spin = 0,
     dragStart = 0,
@@ -60,7 +60,7 @@ scene.add(box);
 
 // create ground
 
-var groundGeometry = new THREE.CubeGeometry(50, 5, 50),
+var groundGeometry = new THREE.CubeGeometry(49, 5, 49),
     groundMaterial = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.DoubleSide}),
     ground = new THREE.Mesh(groundGeometry,groundMaterial);
 
