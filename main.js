@@ -38,11 +38,6 @@ light.shadowMapWidth = light.shadowMapHeight = 1024;
 light.shadowDarkness = .7;
 scene.add(light);
 
-// Add a random cube...
-
-var geometry = new THREE.CubeGeometry(1, 1, 1);
-var material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
-
 // Create the glassy box
 
 var box = new THREE.Mesh(
@@ -71,7 +66,15 @@ box.add(ground);
 // create Snow
 
 var snowGeometry = new THREE.Geometry(),
-    snowMaterial = new THREE.PointCloudMaterial({ color: 0xffffff, size: 0.1 }),
+    snowflake    = THREE.ImageUtils.loadTexture("snowflake.png"),
+    snowMaterial = new THREE.PointCloudMaterial({
+      size: 0.1,
+      map: snowflake,
+      opacity: 0.5,
+      depthTest: false,
+      blending: THREE.AdditiveBlending,
+      transparent: true
+    }),
     snow         = new THREE.PointCloud(snowGeometry, snowMaterial);
 
 snow.sortParticles = true;
@@ -92,7 +95,7 @@ box.add(snow);
 
 // Position camera
 
-camera.position.set(0,0,80);
+camera.position.set(0, 0, 80);
 
 // Event listeners
 /*
