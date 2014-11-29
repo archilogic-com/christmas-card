@@ -9,6 +9,7 @@ var spin = 0,
 
 var scene = new THREE.Scene(),
     camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 1000),
+    loader = new THREE.OBJLoader();
     renderer = new THREE.WebGLRenderer();
 
 document.body.appendChild(renderer.domElement);
@@ -61,7 +62,14 @@ var groundGeometry = new THREE.CubeGeometry(49, 5, 49),
 
 ground.position.set(0, -22.5, 0);
 box.add(ground);
-//scene.add(ground);
+
+// Create tree
+loader.load("Xmas_Tree_outdoor.obj", function(tree) {
+  console.log("Loaded");
+  tree.position.set(10, -20, 10);
+  tree.scale.set(0.4, 0.4, 0.4)
+  box.add(tree);
+});
 
 // create Snow
 
