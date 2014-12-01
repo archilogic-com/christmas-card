@@ -1,7 +1,7 @@
 var WIDTH = window.innerWidth,
     HEIGHT = window.innerHeight,
-    NUM_SNOWFLAKES = 10000,
-    FALL_SPEED_QUOTIENT = 10;
+    NUM_SNOWFLAKES = 2000,
+    FALL_SPEED_QUOTIENT = 45;
 
 var spin = 0,
     dragStart = 0,
@@ -10,9 +10,19 @@ var spin = 0,
 var scene = new THREE.Scene(),
     camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 1000),
     loader = new THREE.OBJMTLLoader(),
-    renderer = new THREE.WebGLRenderer({antialias: true, });
+    renderer = new THREE.WebGLRenderer({ antialias: true });
 
-document.body.appendChild(renderer.domElement);
+var loading = true,
+    messageIndex = 0,
+    messages = ['Making hot chocolate...', 'Baking cookies...', 'Singing Christmas carols...', 'Lighting candles...', 'Scaring away grinches...', 'Decorating Christmas tree..'];
+
+setTimeout(function showLoadingMessage() {
+  var h1 = document.querySelector("h1");
+  if(h1) h1.textContent = messages[messageIndex++];
+
+  if(messageIndex == messages.length) messageIndex = 0;
+  if(loading) setTimeout(showLoadingMessage, 5000);
+}, 5000);
 
 renderer.setSize(WIDTH, HEIGHT);
 
@@ -41,27 +51,9 @@ scene.add(light);
 
 // Create the glassy box
 
-var box = new THREE.Object3D(); /*THREE.Mesh(
-  new THREE.CubeGeometry(50, 50, 50),
-  new THREE.MeshLambertMaterial({
-    color: 0x80aaff,
-    reflectivity: .8,
-    transparent: true,
-    opacity: 0.5,
-    side: THREE.DoubleSide
-  })
-);*/
+var box = new THREE.Object3D();
 
 scene.add(box);
-
-// create ground
-
-var groundGeometry = new THREE.CubeGeometry(49, 5, 49),
-    groundMaterial = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.DoubleSide}),
-    ground = new THREE.Mesh(groundGeometry,groundMaterial);
-
-ground.position.set(0, -22.5, 0);
-box.add(ground);
 
 // Create awesomeness
 var tmpMaterial = new THREE.MeshPhongMaterial({color: 0xffffff});
@@ -75,6 +67,10 @@ loader.load("model/XMASCard9_TextureImplementation.obj", "model/XMASCard9_Textur
   awesomeStuff.position.set(5, 3, -1);
   awesomeStuff.scale.set(0.2, 0.2, 0.2)
   box.add(awesomeStuff);
+
+  loading = false;
+  document.body.appendChild(renderer.domElement);
+  document.body.removeChild(document.getElementById("loading"));
 });
 
 
@@ -83,7 +79,7 @@ loader.load("model/XMASCard9_TextureImplementation.obj", "model/XMASCard9_Textur
 var snowGeometry = new THREE.Geometry(),
     snowflake    = THREE.ImageUtils.loadTexture("snowflake.png"),
     snowMaterial = new THREE.PointCloudMaterial({
-      size: 0.1,
+      size: 0.3,
       map: snowflake,
       opacity: 0.5,
       depthTest: false,
@@ -105,12 +101,11 @@ for(var i=0;i<NUM_SNOWFLAKES;i++) {
 	snowGeometry.vertices.push(vector);
 }
 
-//scene.add(snow);
 box.add(snow);
 
 // Position camera
 
-camera.position.set(0, 20, 60);
+camera.position.set(0, 10, 40);
 
 // Event listeners
 /*
@@ -203,7 +198,7 @@ function render() {
     }
   }
 
-  box.rotation.y += 0.005;
+  box.rotation.y += 0.001;
 
   renderer.render(scene, camera);
 }
