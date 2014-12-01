@@ -4,8 +4,7 @@ var WIDTH = window.innerWidth,
     FALL_SPEED_QUOTIENT = 45;
 
 var spin = 0,
-    dragStart = 0,
-    dragging  = false;
+    wasMoved = false;
 
 var scene = new THREE.Scene(),
     camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 1000),
@@ -115,6 +114,8 @@ hammertime.on('pan', function(e) {
       turnX = -Math.PI * 0.01 * (e.deltaY / window.innerHeight);
   camAnchor.rotation.y += turnY;
   camAnchor.rotation.x += turnX;
+
+  wasMoved = true;
 });
 
 hammertime.on('pinchmove', function(e) {
@@ -215,7 +216,7 @@ function render() {
     }
   }
 
-  centerAnchor.rotation.y += 0.001;
+  if(!wasMoved) centerAnchor.rotation.y += 0.001;
 
   renderer.render(scene, camera);
 }
