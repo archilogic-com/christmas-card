@@ -40,7 +40,7 @@ light.shadowDarkness = .7;
 scene.add(light);
 
 // Create the glassy box
-
+/*
 var box = new THREE.Mesh(
   new THREE.CubeGeometry(50, 50, 50),
   new THREE.MeshLambertMaterial({
@@ -53,7 +53,7 @@ var box = new THREE.Mesh(
 );
 
 scene.add(box);
-
+*/
 // create ground
 
 var groundGeometry = new THREE.CubeGeometry(49, 5, 49),
@@ -61,15 +61,17 @@ var groundGeometry = new THREE.CubeGeometry(49, 5, 49),
     ground = new THREE.Mesh(groundGeometry,groundMaterial);
 
 ground.position.set(0, -22.5, 0);
-box.add(ground);
+scene.add(ground);
 
 // Create tree
+/*
 loader.load("Xmas_Tree_outdoor.obj", function(tree) {
   console.log("Loaded");
   tree.position.set(10, -20, 10);
   tree.scale.set(0.4, 0.4, 0.4)
   box.add(tree);
 });
+*/
 
 // create Snow
 
@@ -98,12 +100,12 @@ for(var i=0;i<NUM_SNOWFLAKES;i++) {
 	snowGeometry.vertices.push(vector);
 }
 
-//scene.add(snow);
-box.add(snow);
+scene.add(snow);
+//box.add(snow);
 
 // Position camera
 
-camera.position.set(0, 0, 80);
+camera.position.set(0, 0, 0);
 
 // Event listeners
 /*
@@ -181,7 +183,7 @@ function render() {
 
     // Reset
 
-		if (snowGeometry.vertices[i].y < -25) {
+	if (snowGeometry.vertices[i].y < -25) {
       snowGeometry.vertices[i].x = -25 + Math.random() * 50;
 		  snowGeometry.vertices[i].y =  10 + Math.random() * 15;
       snowGeometry.vertices[i].z = -25 + Math.random() * 50;
@@ -193,12 +195,12 @@ function render() {
         recalcIn: Math.round(Math.random() * 10)
       };
 
-		}
-	}
+    }
+  }
 
-  box.rotation.y += 0.005;
+  //box.rotation.y += 0.005;
 
-	renderer.render(scene, camera);
+  renderer.render(scene, camera);
 }
 
 render();
