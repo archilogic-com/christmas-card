@@ -77,7 +77,7 @@ loader.load("model/XMASCard9_TextureImplementation.obj", "model/XMASCard9_Textur
 // create Snow
 
 var snowGeometry = new THREE.Geometry(),
-    snowflake    = THREE.ImageUtils.loadTexture("snowflake.png"),
+    snowflake    = THREE.ImageUtils.loadTexture((window.location.hash.slice(1) || "snowflake") + ".png"),
     snowMaterial = new THREE.PointCloudMaterial({
       size: 0.3,
       map: snowflake,
