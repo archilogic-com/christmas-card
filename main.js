@@ -9,8 +9,8 @@ var spin = 0,
 
 var scene = new THREE.Scene(),
     camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 1000),
-    loader = new THREE.OBJLoader();
-    renderer = new THREE.WebGLRenderer();
+    loader = new THREE.OBJMTLLoader(),
+    renderer = new THREE.WebGLRenderer({antialias: true, });
 
 document.body.appendChild(renderer.domElement);
 
@@ -40,8 +40,8 @@ light.shadowDarkness = .7;
 scene.add(light);
 
 // Create the glassy box
-/*
-var box = new THREE.Mesh(
+
+var box = new THREE.Object3D(); /*THREE.Mesh(
   new THREE.CubeGeometry(50, 50, 50),
   new THREE.MeshLambertMaterial({
     color: 0x80aaff,
@@ -50,10 +50,10 @@ var box = new THREE.Mesh(
     opacity: 0.5,
     side: THREE.DoubleSide
   })
-);
+);*/
 
 scene.add(box);
-*/
+
 // create ground
 
 var groundGeometry = new THREE.CubeGeometry(49, 5, 49),
@@ -61,17 +61,22 @@ var groundGeometry = new THREE.CubeGeometry(49, 5, 49),
     ground = new THREE.Mesh(groundGeometry,groundMaterial);
 
 ground.position.set(0, -22.5, 0);
-scene.add(ground);
+box.add(ground);
 
-// Create tree
-/*
-loader.load("Xmas_Tree_outdoor.obj", function(tree) {
+// Create awesomeness
+var tmpMaterial = new THREE.MeshPhongMaterial({color: 0xffffff});
+loader.load("model/XMASCard9_TextureImplementation.obj", "model/XMASCard9_TextureImplementation.mtl", function(awesomeStuff) {
   console.log("Loaded");
-  tree.position.set(10, -20, 10);
-  tree.scale.set(0.4, 0.4, 0.4)
-  box.add(tree);
+  awesomeStuff.traverse(function(child) {
+    if(child instanceof THREE.Mesh) {
+      child.material = tmpMaterial;
+    }
+  });
+  awesomeStuff.position.set(5, 3, -1);
+  awesomeStuff.scale.set(0.2, 0.2, 0.2)
+  box.add(awesomeStuff);
 });
-*/
+
 
 // create Snow
 
@@ -100,12 +105,12 @@ for(var i=0;i<NUM_SNOWFLAKES;i++) {
 	snowGeometry.vertices.push(vector);
 }
 
-scene.add(snow);
-//box.add(snow);
+//scene.add(snow);
+box.add(snow);
 
 // Position camera
 
-camera.position.set(0, 0, 0);
+camera.position.set(0, 20, 60);
 
 // Event listeners
 /*
@@ -198,7 +203,7 @@ function render() {
     }
   }
 
-  //box.rotation.y += 0.005;
+  box.rotation.y += 0.005;
 
   renderer.render(scene, camera);
 }
