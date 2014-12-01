@@ -56,14 +56,9 @@ var box = new THREE.Object3D();
 scene.add(box);
 
 // Create awesomeness
-var tmpMaterial = new THREE.MeshPhongMaterial({color: 0xffffff});
 loader.load("model/XMASCard9_TextureImplementation.obj", "model/XMASCard9_TextureImplementation.mtl", function(awesomeStuff) {
   console.log("Loaded");
-  awesomeStuff.traverse(function(child) {
-    if(child instanceof THREE.Mesh) {
-      child.material = tmpMaterial;
-    }
-  });
+
   awesomeStuff.position.set(5, 3, -1);
   awesomeStuff.scale.set(0.2, 0.2, 0.2)
   box.add(awesomeStuff);
