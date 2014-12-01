@@ -11,6 +11,9 @@
       width:  100%;
       height: 100%;
       font-family: sans-serif;
+      overflow: hidden;
+
+      background: black; /* iOS has problems with clearing the canvas black, for whatever reason */
     }
   </style>
 </head>
@@ -20,7 +23,8 @@
     <h2>Please enable Javascript for the full experience :)</h2>
   </noscript>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r69/three.min.js"></script>
-  <script src="OBJLoader.js"></script>
+  <script src="http://threejs.org/examples/js/loaders/MTLLoader.js"></script>
+  <script src="http://threejs.org/examples/js/loaders/OBJMTLLoader.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
