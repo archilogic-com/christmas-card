@@ -19,6 +19,9 @@ WIDTH = document.body.clientWidth;
 HEIGHT = document.body.clientHeight;
 renderer.setSize(WIDTH, HEIGHT);
 
+// Make the renderer clear with black
+renderer.setClearColor(0,0);
+
 // Setup ligthing
 
 var ambient = new THREE.AmbientLight(0x404040);
