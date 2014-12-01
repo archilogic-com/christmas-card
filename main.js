@@ -1,5 +1,5 @@
-var WIDTH = document.body.clientWidth,
-    HEIGHT = document.body.clientHeight,
+var WIDTH = window.innerWidth,
+    HEIGHT = window.innerHeight,
     NUM_SNOWFLAKES = 10000,
     FALL_SPEED_QUOTIENT = 10;
 
@@ -14,9 +14,6 @@ var scene = new THREE.Scene(),
 
 document.body.appendChild(renderer.domElement);
 
-// React to silly browsers...
-WIDTH = document.body.clientWidth;
-HEIGHT = document.body.clientHeight;
 renderer.setSize(WIDTH, HEIGHT);
 
 // Make the renderer clear with black
