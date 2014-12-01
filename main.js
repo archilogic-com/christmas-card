@@ -31,7 +31,7 @@ renderer.setClearColor(0,0);
 
 // Setup ligthing
 
-var ambient = new THREE.AmbientLight(0x404040);
+var ambient = new THREE.AmbientLight(0xffffff);
 scene.add(ambient);
 
 light = new THREE.DirectionalLight(0xffffff);
@@ -49,25 +49,26 @@ light.shadowMapWidth = light.shadowMapHeight = 1024;
 light.shadowDarkness = .7;
 scene.add(light);
 
-// Create the glassy box
+// Create the center
 
-var box = new THREE.Object3D();
+var centerAnchor = new THREE.Object3D(),
+    camAnchor    = new THREE.Object3D();
 
-scene.add(box);
+scene.add(centerAnchor);
 
 // Create awesomeness
+
 loader.load("model/XMASCard9_TextureImplementation.obj", "model/XMASCard9_TextureImplementation.mtl", function(awesomeStuff) {
   console.log("Loaded");
 
   awesomeStuff.position.set(5, 3, -1);
   awesomeStuff.scale.set(0.2, 0.2, 0.2)
-  box.add(awesomeStuff);
+  centerAnchor.add(awesomeStuff);
 
   loading = false;
   document.body.appendChild(renderer.domElement);
   document.body.removeChild(document.getElementById("loading"));
 });
-
 
 // create Snow
 
@@ -96,13 +97,34 @@ for(var i=0;i<NUM_SNOWFLAKES;i++) {
 	snowGeometry.vertices.push(vector);
 }
 
-box.add(snow);
+centerAnchor.add(snow);
 
 // Position camera
 
 camera.position.set(0, 10, 40);
+camAnchor.add(camera);
+scene.add(camAnchor);
 
 // Event listeners
+
+var hammertime = new Hammer(document.body, {});
+hammertime.get('pinch').set({ enable: true });
+
+hammertime.on('pan', function(e) {
+  var turnY = -Math.PI * 0.01 * (e.deltaX / window.innerWidth),
+      turnX = -Math.PI * 0.01 * (e.deltaY / window.innerHeight);
+  camAnchor.rotation.y += turnY;
+  camAnchor.rotation.x += turnX;
+});
+
+hammertime.on('pinchmove', function(e) {
+  if(e.scale < 1.0) {
+    camera.translateZ(e.scale);
+  } else {
+    camera.translateZ(-1 * e.scale);
+  }
+});
+
 /*
 window.addEventListener('mousedown', function(e) {
   dragStart = e.clientX;
@@ -145,10 +167,10 @@ function render() {
 	requestAnimationFrame(render);
   /*
   if(spin < 0) {
-    //box.rotation.y -= spin / -5000;
+    //centerAnchor.rotation.y -= spin / -5000;
     spin += 1;
   } else if(spin > 0) {
-    //box.rotation.y += spin / 5000;
+    //centerAnchor.rotation.y += spin / 5000;
     spin -= 1;
   }
 */
@@ -193,7 +215,7 @@ function render() {
     }
   }
 
-  box.rotation.y += 0.001;
+  centerAnchor.rotation.y += 0.001;
 
   renderer.render(scene, camera);
 }
