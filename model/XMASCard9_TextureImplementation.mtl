@@ -119,7 +119,7 @@ Ks 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 1
-map_Kd V:\01_projekte\02_misc\XMAS-Card-Island\BakedTextures\TB_TreesRight.png
+map_Kd TB_TreesRight.png
 
 newmtl TreesRight_NONE
 Ns 96.078431
