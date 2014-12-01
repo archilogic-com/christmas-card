@@ -45,7 +45,6 @@ light.shadowCameraFar = 1000;
 light.shadowBias = -.0001
 light.shadowMapWidth = light.shadowMapHeight = 1024;
 light.shadowDarkness = .7;
-light.intensity = 2;
 scene.add(light);
 
 lightBelow = new THREE.DirectionalLight(0xffffff);
