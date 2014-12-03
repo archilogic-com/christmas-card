@@ -45,6 +45,7 @@ light.shadowCameraFar = 1000;
 light.shadowBias = -.0001
 light.shadowMapWidth = light.shadowMapHeight = 1024;
 light.shadowDarkness = .7;
+light.intensity = 1.6;
 scene.add(light);
 
 lightBelow = new THREE.DirectionalLight(0xffffff);
@@ -60,6 +61,7 @@ lightBelow.shadowBias = -.0001
 lightBelow.shadowMapWidth = light.shadowMapHeight = 1024;
 lightBelow.shadowDarkness = .7;
 lightBelow.rotation.set(-Math.PI, 0, 0);
+lightBelow.intensity = 1.5;
 scene.add(lightBelow);
 
 // Create the center
