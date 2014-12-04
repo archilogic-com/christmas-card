@@ -144,24 +144,25 @@ scene.add(camAnchor);
 var YAxis = new THREE.Vector3(0,1,0),
     XAxis = new THREE.Vector3(1,0,0);
 
+var swingX = 0, swingY = 0;
+
 var hammertime = new Hammer(document.body, {});
 hammertime.get('pinch').set({ enable: true });
 
 hammertime.on('pan', function(e) {
-  var turnY = -Math.PI * 0.01 * (e.deltaX / window.innerWidth),
-      turnX = -Math.PI * 0.01 * (e.deltaY / window.innerHeight);
+  var turnY = -Math.PI * 0.05 * (e.deltaX / window.innerWidth),
+      turnX = -Math.PI * 0.05 * (e.deltaY / window.innerHeight);
   camAnchor.rotation.y += turnY;
   camAnchor.rotation.x += turnX;
+
+  swingX = turnX;
+  swingY = turnY;
 
   wasMoved = true;
 });
 
 hammertime.on('pinchmove', function(e) {
-  if(e.scale < 1.0) {
-    camera.translateZ(e.scale);
-  } else {
-    camera.translateZ(-1 * e.scale);
-  }
+  camera.position.z += 1 - e.scale;
 });
 
 /*
@@ -194,6 +195,34 @@ function render() {
     spin -= 1;
   }
 */
+
+  // Kinetic rotation
+
+  if(swingX != 0) {
+    camAnchor.rotation.x += swingX;
+    if(swingX < -0.001) {
+      swingX += 0.001;
+    } else if(swingX > 0.001) {
+      swingX -= 0.001;
+    } else {
+      swingX = 0;
+    }
+  }
+
+  if(swingY != 0) {
+    camAnchor.rotation.y += swingY;
+    if(swingY < -0.001) {
+      swingY += 0.001;
+    } else if(swingY > 0.001) {
+      swingY -= 0.001;
+    } else {
+      swingY = 0;
+    }
+  }
+
+
+  // Snow movement
+
   for(var i=0;i<NUM_SNOWFLAKES;i++) {
 		snowGeometry.vertices[i].y -= snowGeometry.vertices[i].velocity.y;
     snowGeometry.vertices[i].x += snowGeometry.vertices[i].velocity.x / 100;
@@ -234,6 +263,8 @@ function render() {
 
     }
   }
+
+  // Automatic camera rotation
 
   if(!wasMoved) centerAnchor.rotation.y += 0.001;
 
