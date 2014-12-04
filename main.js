@@ -135,7 +135,7 @@ scene.add(sky);
 // Position camera
 
 camera.position.set(0, 10, 40);
-camAnchor.eulerOrder = 'YXZ';
+camAnchor.rotation.order = 'YXZ';
 camAnchor.add(camera);
 scene.add(camAnchor);
 
@@ -169,36 +169,11 @@ window.addEventListener('wheel', function(e) {
   camera.position.z -= e.wheelDelta / 120;
 })
 
-/*
-window.addEventListener('devicemotion', function(e) {
-  if(e.rotationRate === null || e.rotationRate.alpha === null) return;
-  spin += Math.round(e.rotationRate.alpha * -150);
-
-  if(spin < -1000) {
-    spin = -1000;
-  } else if (spin > 1000) {
-    spin = 1000;
-  }
-});
-
-window.addEventListener("orientationchange", function() {
-  if(window.orientation == 0) alert("Please view this in landscape mode!");
-});
-*/
 
 // Go!
 
 function render() {
 	requestAnimationFrame(render);
-  /*
-  if(spin < 0) {
-    //centerAnchor.rotation.y -= spin / -5000;
-    spin += 1;
-  } else if(spin > 0) {
-    //centerAnchor.rotation.y += spin / 5000;
-    spin -= 1;
-  }
-*/
 
   // Kinetic rotation
 
