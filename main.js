@@ -7,7 +7,7 @@ var spin = 0,
     wasMoved = false;
 
 var scene = new THREE.Scene(),
-    camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 1000),
+    camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 5000),
     loader = new THREE.OBJMTLLoader(),
     renderer = new THREE.WebGLRenderer({ antialias: true });
 
@@ -26,12 +26,12 @@ setTimeout(function showLoadingMessage() {
 renderer.setSize(WIDTH, HEIGHT);
 
 // Make the renderer clear with black
-renderer.setClearColor(0,0);
+renderer.setClearColor(0x00001f);
 
 // Setup ligthing
 
-var ambient = new THREE.AmbientLight(0xffffff);
-scene.add(ambient);
+//var ambient = new THREE.AmbientLight(0x0f0f2b);
+//scene.add(ambient);
 
 light = new THREE.DirectionalLight(0xffffff);
 light.position.set(0, 100, 60);
@@ -113,6 +113,24 @@ for(var i=0;i<NUM_SNOWFLAKES;i++) {
 }
 
 centerAnchor.add(snow);
+
+// Creating skybox
+var directions  = ["right", "left", "top", "top", "front", "back"];
+
+var materialArray = [];
+for (var i = 0; i < 6; i++) {
+  materialArray.push( new THREE.MeshBasicMaterial({
+    map: THREE.ImageUtils.loadTexture('skymap/stars_' + directions[i] + '.jpg'),
+    side: THREE.BackSide
+  }));
+}
+materialArray[3] = new THREE.MeshBasicMaterial({color: 0x0f0f2b});
+
+var skyGeo = new THREE.BoxGeometry(2000, 2000, 2000),
+    skyMat = new THREE.MeshFaceMaterial(materialArray);
+    sky = new THREE.Mesh(skyGeo, skyMat);
+scene.add(sky);
+
 
 // Position camera
 
