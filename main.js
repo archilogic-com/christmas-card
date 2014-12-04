@@ -135,10 +135,14 @@ scene.add(sky);
 // Position camera
 
 camera.position.set(0, 10, 40);
+camAnchor.eulerOrder = 'YXZ';
 camAnchor.add(camera);
 scene.add(camAnchor);
 
 // Event listeners
+
+var YAxis = new THREE.Vector3(0,1,0),
+    XAxis = new THREE.Vector3(1,0,0);
 
 var hammertime = new Hammer(document.body, {});
 hammertime.get('pinch').set({ enable: true });
