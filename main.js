@@ -165,6 +165,10 @@ hammertime.on('pinchmove', function(e) {
   camera.position.z += 1 - e.scale;
 });
 
+window.addEventListener('wheel', function(e) {
+  camera.position.z -= e.wheelDelta / 120;
+})
+
 /*
 window.addEventListener('devicemotion', function(e) {
   if(e.rotationRate === null || e.rotationRate.alpha === null) return;
