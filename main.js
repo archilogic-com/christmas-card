@@ -11,17 +11,6 @@ var scene = new THREE.Scene(),
     loader = new THREE.OBJMTLLoader(),
     renderer = new THREE.WebGLRenderer({ antialias: true });
 
-var loading = true,
-    messageIndex = 0,
-    messages = ['Making hot chocolate...', 'Baking cookies...', 'Singing Christmas carols...', 'Lighting candles...', 'Scaring away grinches...', 'Decorating Christmas tree..'];
-
-setTimeout(function showLoadingMessage() {
-  var h1 = document.querySelector("h1");
-  if(h1) h1.textContent = messages[messageIndex++];
-
-  if(messageIndex == messages.length) messageIndex = 0;
-  if(loading) setTimeout(showLoadingMessage, 5000);
-}, 5000);
 
 renderer.setSize(WIDTH, HEIGHT);
 
