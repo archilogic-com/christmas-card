@@ -21,7 +21,6 @@
     var _ = require('underscore')
     var Q = require('q')
     var THREE = require('three')
-    var $ = require('jquery')
 
     var parseGeometry = require('./json-al1/parse-geometry')
     var parseMaterial = require('./json-al1/parse-material')
@@ -66,6 +65,7 @@
 
     function loadJsonFile(data){
         var d = Q.defer()
+        /*
         $.ajax({
             url: data.url, //convertToShardedUrl(data.url),
             dataType: "json",
@@ -76,7 +76,16 @@
             error: function(jqXHR, textStatus, errorThrown){
                 throw new JsonLoadError(data.url, jqXHR, textStatus, errorThrown);
             }
-        })
+        })*/
+
+        var loader = new THREE.XHRLoader();
+        loader.load(data.url, function(response) {
+          data.json = JSON.parse(response);
+          d.resolve(data);
+        }, null, function(err) {
+          throw new JSONLoadError(data.url, null, err, err);
+        });
+
         return d.promise
     }
 
