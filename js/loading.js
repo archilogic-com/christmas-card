@@ -25,4 +25,6 @@ module.exports = (function() {
     loading = false;
     container.parentNode.removeChild(container);
   }
-});
+
+  return this;
+})();
