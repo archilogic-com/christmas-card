@@ -2,6 +2,7 @@ var LoadingScreen = require('./loading.js'),
     Snow = require('./snow.js'),
     World = require('three-world'),
     Skybox = require('./skybox.js'),
+    KineticControls = require('./kinetic-controls.js'),
     THREE = require('three'),
     MTLLoader = require('./loaders/MTLLoader.js'),
     OBJMTLLoader = require('./loaders/OBJMTLLoader.js');
@@ -87,60 +88,13 @@ camAnchor.add(camera);
 World.add(camAnchor);
 
 // Event listeners
-
-var swingX = 0, swingY = 0;
-
-var hammertime = new Hammer(document.body, {});
-hammertime.get('pinch').set({ enable: true });
-
-hammertime.on('pan', function(e) {
-  var turnY = -Math.PI * 0.05 * (e.deltaX / window.innerWidth),
-      turnX = -Math.PI * 0.05 * (e.deltaY / window.innerHeight);
-  camAnchor.rotation.y += turnY;
-  camAnchor.rotation.x += turnX;
-
-  swingX = turnX;
-  swingY = turnY;
-
-  wasMoved = true;
-});
-
-hammertime.on('pinchmove', function(e) {
-  camera.position.z += 1 - e.scale;
-});
-
-window.addEventListener('wheel', function(e) {
-  camera.position.z -= e.wheelDelta / 120;
-})
-
+KineticControls.init(camera, camAnchor);
 
 // Go!
 
 function render() {
   // Kinetic rotation
-
-  if(swingX != 0) {
-    camAnchor.rotation.x += swingX;
-    if(swingX < -0.001) {
-      swingX += 0.001;
-    } else if(swingX > 0.001) {
-      swingX -= 0.001;
-    } else {
-      swingX = 0;
-    }
-  }
-
-  if(swingY != 0) {
-    camAnchor.rotation.y += swingY;
-    if(swingY < -0.001) {
-      swingY += 0.001;
-    } else if(swingY > 0.001) {
-      swingY -= 0.001;
-    } else {
-      swingY = 0;
-    }
-  }
-
+  KineticControls.update();
 
   // Snow movement
 
