@@ -1,6 +1,7 @@
 var LoadingScreen = require('./loading.js'),
     Snow = require('./snow.js'),
     World = require('three-world'),
+    Skybox = require('./skybox.js'),
     THREE = require('three'),
     MTLLoader = require('./loaders/MTLLoader.js'),
     OBJMTLLoader = require('./loaders/OBJMTLLoader.js');
@@ -72,21 +73,7 @@ loader.load("model/XMASCard9_TextureImplementation.obj", "model/XMASCard9_Textur
 Snow.init((window.location.hash.slice(1) || "snowflake") + ".png");
 centerAnchor.add(Snow.getObject());
 
-// Creating skybox
-var directions  = ["right", "left", "top", "top", "front", "back"];
-
-var materialArray = [];
-for (var i = 0; i < 6; i++) {
-  materialArray.push( new THREE.MeshBasicMaterial({
-    map: THREE.ImageUtils.loadTexture('skymap/stars_' + directions[i] + '.jpg'),
-    side: THREE.BackSide
-  }));
-}
-materialArray[3] = new THREE.MeshBasicMaterial({color: 0x0f0f2b});
-
-var skyGeo = new THREE.BoxGeometry(2000, 2000, 2000),
-    skyMat = new THREE.MeshFaceMaterial(materialArray);
-    sky = new THREE.Mesh(skyGeo, skyMat);
+var sky = Skybox('skymap/stars_', 'jpg');
 World.add(sky);
 
 
