@@ -7,9 +7,6 @@ var LoadingScreen = require('./loading.js'),
     MTLLoader = require('./loaders/MTLLoader.js'),
     OBJMTLLoader = require('./loaders/OBJMTLLoader.js');
 
-var spin = 0,
-    wasMoved = false;
-
 var loader = new OBJMTLLoader();
 LoadingScreen.start(document.getElementById("loading"));
 
@@ -102,5 +99,5 @@ function render() {
 
   // Automatic camera rotation
 
-  if(!wasMoved) centerAnchor.rotation.y += 0.001;
+  centerAnchor.rotation.y += 0.001;
 }
