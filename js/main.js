@@ -11,13 +11,13 @@ LoadingScreen.start(document.getElementById("loading"));
 World.init({
   farPlane: 10000,
   renderCallback: render,
-  clearColor: 0x00001f,
+  clearColor: 0x121023,
   ambientLightColor: 0
 });
 
 // Setup ligthing
 
-lightBelow = new THREE.DirectionalLight(0xffffff);
+lightBelow = new THREE.DirectionalLight(0x0000ff);
 lightBelow.position.set(0, -50, 0);
 lightBelow.castShadow = true;
 lightBelow.shadowCameraLeft = -60;
