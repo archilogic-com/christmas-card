@@ -23,6 +23,29 @@
       text-align: center;
 
     }
+
+    body.fallback {
+      background-image: url('fallback_snapshot.png');
+      background-size: cover;
+    }
+
+    .fallback h1 {
+      position: absolute;
+      top: 50%;
+      margin-top: -2em;
+
+      text-align: center;
+
+      height: 4em;
+      width: 100%;
+
+      font-size: 4em;
+      vertical-align: middle;
+      line-height: 4em;
+
+      background: rgb(255, 255, 255);
+      background: rgba(255, 255, 255, 0.8);
+    }
   </style>
 </head>
 <body>
@@ -37,6 +60,7 @@
   </div>
 
   <script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
+  <script src="http://threejs.org/examples/js/Detector.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

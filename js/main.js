@@ -8,6 +8,12 @@ var LoadingScreen = require('./loading.js'),
 
 LoadingScreen.start(document.getElementById("loading"));
 
+if(!Detector.webgl) {
+  document.body.classList.add("fallback");
+  document.body.innerHTML = "<h1>Merry Christmas from Archilogic!</h1>";
+  return;
+}
+
 World.init({
   farPlane: 10000,
   renderCallback: render,
