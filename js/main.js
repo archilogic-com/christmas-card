@@ -4,10 +4,11 @@ var LoadingScreen = require('./loading.js'),
     Skybox = require('./skybox.js'),
     KineticControls = require('./kinetic-controls.js'),
     THREE = require('three'),
-    MTLLoader = require('./loaders/MTLLoader.js'),
-    OBJMTLLoader = require('./loaders/OBJMTLLoader.js');
+    loadAL2 = require('./loaders/al2loader');
+//    MTLLoader = require('./loaders/MTLLoader.js'),
+//    OBJMTLLoader = require('./loaders/OBJMTLLoader.js');
 
-var loader = new OBJMTLLoader();
+//var loader = new OBJMTLLoader();
 LoadingScreen.start(document.getElementById("loading"));
 
 World.init({
@@ -29,7 +30,7 @@ light.shadowCameraFar = 1000;
 light.shadowBias = -.0001
 light.shadowMapWidth = light.shadowMapHeight = 1024;
 light.shadowDarkness = .7;
-light.intensity = 1.6;
+//light.intensity = 1.6;
 World.add(light);
 
 lightBelow = new THREE.DirectionalLight(0xffffff);
@@ -45,7 +46,7 @@ lightBelow.shadowBias = -.0001
 lightBelow.shadowMapWidth = light.shadowMapHeight = 1024;
 lightBelow.shadowDarkness = .7;
 lightBelow.rotation.set(-Math.PI, 0, 0);
-lightBelow.intensity = 1.5;
+//lightBelow.intensity = 1.5;
 World.add(lightBelow);
 
 // Create the center
@@ -57,6 +58,20 @@ World.add(centerAnchor);
 
 // Create awesomeness
 
+loadAL2({
+  url: "model2/XMASCard9_TextureImplementationB.al2.json",
+  onReady: function(model) {
+    var theIsland = model.parent3d;
+    theIsland.position.set(5, 3, -1);
+    theIsland.scale.set(0.2, 0.2, 0.2)
+
+    centerAnchor.add(theIsland);
+    LoadingScreen.stop();
+    World.startRenderLoop();
+  }
+});
+
+/*
 loader.load("model/XMASCard9_TextureImplementation.obj", "model/XMASCard9_TextureImplementation.mtl", function(awesomeStuff) {
   console.log("Loaded");
 
@@ -67,6 +82,8 @@ loader.load("model/XMASCard9_TextureImplementation.obj", "model/XMASCard9_Textur
   LoadingScreen.stop();
   World.startRenderLoop();
 });
+*/
+
 
 Snow.init((window.location.hash.slice(1) || "snowflake") + ".png");
 centerAnchor.add(Snow.getObject());
