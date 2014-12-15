@@ -1,18 +1,19 @@
 module.exports = (function() {
-  var instance = {}, hammertime, cam, camAnchor;
+  var instance = {}, hammertime, cam, camAnchor, minZ = 0;
   var swingX = 0, swingY = 0, wasMoved = false;
 
-  instance.init = function(camera, cameraAnchor) {
+  instance.init = function(camera, cameraAnchor, minCamZ) {
     var hammertime = new Hammer(document.body, {});
 
     cam = camera;
     camAnchor = cameraAnchor;
+    minZ = minCamZ;
 
     hammertime.get('pinch').set({ enable: true });
 
     hammertime.on('pan', function(e) {
-      var turnY = -Math.PI * 0.05 * (e.deltaX / window.innerWidth),
-          turnX = -Math.PI * 0.05 * (e.deltaY / window.innerHeight);
+      var turnY = -Math.PI * 0.02 * (e.deltaX / window.innerWidth),
+          turnX = -Math.PI * 0.02 * (e.deltaY / window.innerHeight);
 
       if(camAnchor) {
         camAnchor.rotation.y += turnY;
@@ -28,7 +29,8 @@ module.exports = (function() {
     });
 
     hammertime.on('pinchmove', function(e) {
-      camera.position.z += 1 - e.scale;
+      if(camera.position.z > minZ)
+      camera.position.z += (1 - e.scale) / 2;
       wasMoved = true;
     });
 
