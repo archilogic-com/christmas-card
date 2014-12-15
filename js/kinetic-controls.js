@@ -29,7 +29,8 @@ module.exports = (function() {
     });
 
     hammertime.on('pinchmove', function(e) {
-      if(camera.position.z > minZ)
+      if(e.scale >= 1.0 && camera.position.z <= minZ) return;
+
       camera.position.z += (1 - e.scale) / 2;
       wasMoved = true;
     });
