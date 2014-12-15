@@ -22,10 +22,10 @@
     var Q = require('q')
     var THREE = require('three')
 
-    var parseGeometry = require('./json-al1/parse-geometry')
-    var parseMaterial = require('./json-al1/parse-material')
+    var parseGeometry = require('./json-al2/parse-geometry')
+    var parseMaterial = require('./json-al2/parse-material')
 
-    require("./dds/dds-loader");
+    require("./dds");
 
     var ddsLoader = new THREE.DDSLoader();
 
