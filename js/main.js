@@ -1,8 +1,8 @@
 var LoadingScreen = require('./loading.js'),
     World = require('three-world'),
     THREE = require('three'),
-    MTLLoader = require('./MTLLoader.js'),
-    OBJMTLLoader = require('./OBJMTLLoader.js');
+    MTLLoader = require('./loaders/MTLLoader.js'),
+    OBJMTLLoader = require('./loaders/OBJMTLLoader.js');
 
 var NUM_SNOWFLAKES = 2000,
     FALL_SPEED_QUOTIENT = 45;
