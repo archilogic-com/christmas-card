@@ -12,8 +12,8 @@ module.exports = function(path, extension) {
   }
 
   // top and bottom shall have solid colours
-  materialArray[2] = new THREE.MeshBasicMaterial({color: 0x121023});
-  materialArray[3] = new THREE.MeshBasicMaterial({color: 0x121023});
+  materialArray[2] = new THREE.MeshBasicMaterial({color: 0x020b1c}); //0x121023});
+  materialArray[3] = new THREE.MeshBasicMaterial({color: 0x020b1c}); //0x121023});
 
   var skyGeo = new THREE.BoxGeometry(2000, 2000, 2000),
       skyMat = new THREE.MeshFaceMaterial(materialArray);
