@@ -35,9 +35,12 @@ module.exports = (function() {
       wasMoved = true;
     });
 
-    window.addEventListener('wheel', function(e) {
+    document.body.addEventListener('wheel', function(e) {
+      if(e.wheelDelta > 0 && camera.position.z <= minZ) return;
       camera.position.z -= e.wheelDelta / 120;
       wasMoved = true;
+      e.stopPropagation();
+      e.preventDefault();
     })
   };
 
