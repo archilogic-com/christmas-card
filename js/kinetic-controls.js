@@ -36,8 +36,14 @@ module.exports = (function() {
     });
 
     document.body.addEventListener('wheel', function(e) {
-      if(e.wheelDelta > 0 && camera.position.z <= minZ) return;
-      camera.position.z -= e.wheelDelta / 120;
+      if(e.wheelDelta) { // Chrome
+        if(e.wheelDelta > 0 && camera.position.z <= minZ) return;
+        camera.position.z -= e.wheelDelta / 120;
+      } else if(e.deltaY) { // Firefox / IE
+        if(e.deltaY < 0 && camera.position.z <= minZ) return;
+        camera.position.z += Math.max(Math.min(e.deltaY, 5), -5);
+      }
+
       wasMoved = true;
       e.stopPropagation();
       e.preventDefault();
