@@ -61,7 +61,7 @@ loadAL2({
   }
 });
 
-Snow.init((window.location.hash.slice(1) || "snowflake") + ".png", 6000);
+Snow.init("archiflake.png", 6000);
 centerAnchor.add(Snow.getObject());
 
 var sky = Skybox('skymap/stars_', 'jpg');
