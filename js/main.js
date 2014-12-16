@@ -10,7 +10,7 @@ LoadingScreen.start(document.getElementById("loading"));
 
 if(!Detector.webgl) {
   document.body.classList.add("fallback");
-  document.body.innerHTML = "<div><h1>Merry Christmas from Archilogic!</h1><p><a href=\"http://beta.archilogic.com/getwebgl\">Get WebGL for the full experience</a></p></div>";
+  document.body.innerHTML = "<div class=\"wrap\"><h1>Merry Christmas from Archilogic!</h1><p><a href=\"http://beta.archilogic.com/getwebgl\">Get WebGL for the full experience</a></p></div>";
   return;
 }
 
