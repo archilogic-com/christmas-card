@@ -49,7 +49,7 @@ World.add(centerAnchor);
 // Create awesomeness
 
 loadAL2({
-  url: "model2/XMASCard9_TextureImplementationB.al2.json",
+  url: "model3/XMASCard9_TextureImplementationB.al2.json",
   onReady: function(model) {
     var theIsland = model.parent3d;
     theIsland.position.set(5, 3, -1);
@@ -64,7 +64,7 @@ loadAL2({
 Snow.init("archiflake.png", 6000);
 centerAnchor.add(Snow.getObject());
 
-var sky = Skybox('skymap/stars_', 'jpg');
+var sky = Skybox('skymap/new/Skybox', 'jpg');
 World.add(sky);
 
 // Position camera
