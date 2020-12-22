@@ -1,98 +1,137 @@
-var LoadingScreen = require('./loading.js'),
-    Snow = require('./snow.js'),
-    World = require('three-world'),
-    Skybox = require('./skybox.js'),
-    KineticControls = require('./kinetic-controls.js'),
-    THREE = require('three'),
-    loadAL2 = require('./loaders/al2loader');
+// import LoadingScreen from './loading.js'
+import Snow from './snow.js'
+import * as THREE from 'three'
 
-LoadingScreen.start(document.getElementById("loading"));
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
-if(!Detector.webgl) {
-  document.body.classList.add("fallback");
-  document.body.innerHTML = "<div class=\"wrap\"><h1>Merry Christmas from Archilogic!</h1><p><a href=\"http://beta.archilogic.com/getwebgl\">Get WebGL for the full experience</a></p></div>";
-  return;
-}
+function loadIsland() {
+  let camera, scene, renderer, controls
 
-World.init({
-  farPlane: 10000,
-  renderCallback: render,
-  clearColor: 0x121023,
-  ambientLightColor: 0
-});
+  let windowHalfX = window.innerWidth / 2
+  let windowHalfY = window.innerHeight / 2
 
-// Setup ligthing
+  init()
+  animate()
 
-lightBelow = new THREE.DirectionalLight(0x0000ff);
-lightBelow.position.set(0, -50, 0);
-lightBelow.castShadow = true;
-lightBelow.shadowCameraLeft = -60;
-lightBelow.shadowCameraTop = -60;
-lightBelow.shadowCameraRight = 60;
-lightBelow.shadowCameraBottom = 60;
-lightBelow.shadowCameraNear = 1;
-lightBelow.shadowCameraFar = 1000;
-lightBelow.shadowBias = -.0001
-lightBelow.shadowMapWidth = 1024;
-lightBelow.shadowDarkness = .7;
-lightBelow.rotation.set(-Math.PI, 0, 0);
-lightBelow.intensity = 0.2;
-World.add(lightBelow);
+  function init() {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    container.setAttribute('style', 'display: none;')
 
-// Create the center
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
+    camera.position.set(30, 15, 30)
 
-var centerAnchor = new THREE.Object3D(),
-    camAnchor    = new THREE.Object3D();
+    controls = new OrbitControls(camera, container)
+    controls.target.set(0, 0, 0)
+    controls.enableDamping = true
+    controls.autoRotate = true
+    controls.autoRotateSpeed = 0.25
+    controls.minDistance = 20
+    controls.maxDistance = 75
+    controls.update()
 
-World.add(centerAnchor);
+    // scene
 
-// Create awesomeness
+    scene = new THREE.Scene()
 
-loadAL2({
-  url: "model3/XMASCard9_TextureImplementationB.al2.json",
-  onReady: function(model) {
-    var theIsland = model.parent3d;
-    theIsland.position.set(5, 3, -1);
-    theIsland.scale.set(0.2, 0.2, 0.2)
+    const ambientLight = new THREE.AmbientLight(0xffffff)
+    scene.add(ambientLight)
+    scene.add(camera)
 
-    centerAnchor.add(theIsland);
-    LoadingScreen.stop();
-    World.startRenderLoop();
+    // model
+
+    // const loader = new GLTFLoader()
+    // loader.load('island/island.gltf', function (gltf) {
+    //   const island = gltf.scene
+    //   island.position.set(5, 3, -1)
+    //   island.scale.set(0.2, 0.2, 0.2)
+
+    //   scene.add(island)
+    //   render()
+    // })
+
+    const onProgress = function (xhr) {
+      if (xhr.lengthComputable) {
+        const percentComplete = (xhr.loaded / xhr.total) * 100
+        console.log(Math.round(percentComplete, 2) + '% downloaded')
+      }
+    }
+
+    const onError = function () {}
+
+    const manager = new THREE.LoadingManager()
+
+    new MTLLoader(manager).load('island/island.mtl', function (materials) {
+      materials.preload()
+
+      new OBJLoader(manager).setMaterials(materials).load(
+        'island/island.obj',
+        island => {
+          island.position.set(5, 3, -1)
+          island.scale.set(0.2, 0.2, 0.2)
+          scene.add(island)
+          document.getElementById('loading').setAttribute('style', 'display: none;')
+          container.setAttribute('style', 'display: block;')
+        },
+        onProgress,
+        onError
+      )
+    })
+
+    // skybox
+
+    scene.background = new THREE.CubeTextureLoader()
+      .setPath('skymap/')
+      .load([
+        'SkyboxSide1B.jpg',
+        'SkyboxSide4B.jpg',
+        'SkyboxTop.jpg',
+        'SkyboxTop.jpg',
+        'SkyboxSide1B.jpg',
+        'SkyboxSide4B.jpg'
+      ])
+
+    Snow.init('archiflake.png', 6000)
+    scene.add(Snow.getObject())
+
+    renderer = new THREE.WebGLRenderer()
+    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setSize(window.innerWidth, window.innerHeight)
+
+    renderer.setClearColor(0x121023)
+    container.appendChild(renderer.domElement)
+
+    //
+
+    window.addEventListener('resize', onWindowResize, false)
   }
-});
 
-Snow.init("archiflake.png", 6000);
-centerAnchor.add(Snow.getObject());
+  function onWindowResize() {
+    windowHalfX = window.innerWidth / 2
+    windowHalfY = window.innerHeight / 2
 
-var sky = Skybox('skymap/new/Skybox', 'jpg');
-World.add(sky);
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
 
-// Position camera
+    renderer.setSize(window.innerWidth, window.innerHeight)
+  }
 
-var camera = World.getCamera();
+  //
 
-camera.position.set(0, 0, 40);
-camAnchor.rotation.order = 'YXZ';
-camAnchor.add(camera);
-window.camAnchor = camAnchor;
-World.add(camAnchor);
+  function animate() {
+    requestAnimationFrame(animate)
+    render()
+  }
 
-camAnchor.rotation.set(-Math.PI/8, Math.PI/2 - 0.1, 0);
+  function render() {
+    Snow.update()
+    controls.update()
 
-// Event listeners
-KineticControls.init(camera, camAnchor, 23);
-
-// Go!
-
-function render() {
-  // Kinetic rotation
-  KineticControls.update();
-
-  // Snow movement
-
-  Snow.update();
-
-  // Automatic camera rotation
-
-  if(!KineticControls.wasMoved()) centerAnchor.rotation.y += 0.001;
+    renderer.render(scene, camera)
+  }
 }
+
+loadIsland()

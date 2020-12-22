@@ -1,23 +1,18 @@
 {
   "name": "webgl-snowcube",
-  "version": "1.0.0",
-  "description": "Seasons greetigns from Archilogic",
+  "version": "2.0.0",
+  "description": "Seasons greetings from Archilogic",
   "main": "main.js",
   "scripts": {
-    "build": "browserify js/main.js | uglifyjs -mc > app.js",
-    "dev": "watchify js/main.js -o app.js -dv"
+    "dev": "snowpack dev",
+    "build": "snowpack build"
   },
-  "author": "Martin Naumann",
+  "author": "Archilogic",
   "license": "ISC",
   "dependencies": {
-    "q": "^1.1.2",
-    "three": "^0.69.0",
-    "three-world": "^1.0.5",
-    "underscore": "^1.7.0"
+    "three": "^0.123.0"
   },
   "devDependencies": {
-    "browserify": "^7.0.1",
-    "uglify-js": "^2.4.16",
-    "watchify": "^2.2.1"
+    "snowpack": "^2.18.5"
   }
 }

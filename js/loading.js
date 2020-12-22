@@ -1,4 +1,4 @@
-module.exports = (function() {
+export default (function() {
   var loading = true,
       messageIndex = 0,
       messages = [
