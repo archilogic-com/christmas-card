@@ -1,0 +1,8 @@
+{
+  "imports": {
+    "three": "./three.js",
+    "three/examples/jsm/controls/OrbitControls.js": "./three/examples/jsm/controls/OrbitControls.js",
+    "three/examples/jsm/loaders/MTLLoader.js": "./three/examples/jsm/loaders/MTLLoader.js",
+    "three/examples/jsm/loaders/OBJLoader": "./three/examples/jsm/loaders/OBJLoader.js"
+  }
+}
