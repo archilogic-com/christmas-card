@@ -65,6 +65,8 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
+.DS_Store
+
 # Yarn Integrity file
 .yarn-integrity
 

@@ -1,1 +1,0 @@
-console.error("\n/Users/frederic/code/archilogic/christmas-card/js/main.js:1\nimport LoadingScreen from './loading.js'\n^\nParseError: 'import' and 'export' may appear only with 'sourceType: module'");
