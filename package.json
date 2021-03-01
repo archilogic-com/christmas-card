@@ -10,7 +10,7 @@
   "author": "Archilogic",
   "license": "ISC",
   "dependencies": {
-    "three": "^0.123.0"
+    "three": "^0.125.0"
   },
   "devDependencies": {
     "snowpack": "^2.18.5"
