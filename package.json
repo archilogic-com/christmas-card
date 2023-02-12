@@ -13,6 +13,6 @@
     "three": "^0.137.0"
   },
   "devDependencies": {
-    "snowpack": "^2.18.5"
+    "snowpack": "^3.7.1"
   }
 }
